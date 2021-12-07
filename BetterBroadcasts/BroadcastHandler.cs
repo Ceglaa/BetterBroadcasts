@@ -4,6 +4,7 @@
     using Exiled.Events.EventArgs;
     using MEC;
     using System.Collections.Generic;
+    using System.Linq;
 
     internal sealed class BroadcastHandler
     {
@@ -15,7 +16,9 @@
                 Log.Debug($"Dleay: {timedbc.Delay}, Duration: {timedbc.Duration}, Text: {timedbc.Text}", Plugin.Singleton.Config.DebugMode);
                 Timing.CallDelayed(timedbc.Delay, () =>
                 {
-                    Map.Broadcast(timedbc.Duration, timedbc.Text);
+                    string text = timedbc.Text;
+                    text = Plugin.Singleton.Config.BroadcastVariables.Aggregate(text, (result, s) => result.Replace(s.Key, s.Value));
+                    Map.Broadcast(timedbc.Duration, text);
                     Log.Debug($"Timed Broadcast fired: Dleay: {timedbc.Delay}, Duration: {timedbc.Duration}, Text: {timedbc.Text}", Plugin.Singleton.Config.DebugMode);
                 });
             }
@@ -38,6 +41,7 @@
         {
             for (; ; )
             {
+                text = Plugin.Singleton.Config.BroadcastVariables.Aggregate(text, (result, s) => result.Replace(s.Key, s.Value));
                 Map.Broadcast(duration, text, global::Broadcast.BroadcastFlags.Normal, true);
                 Log.Debug($"Repeated Broadcast fired: Interval: {interval}, Duration: {duration}, Text: {text}", Plugin.Singleton.Config.DebugMode);
                 yield return Timing.WaitForSeconds(interval);

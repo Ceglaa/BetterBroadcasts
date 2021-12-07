@@ -20,18 +20,18 @@
         {
             new TimedBroadcast
             {
+                Text = "Test Timed Broadcast",
                 Delay = 10f,
-                Duration = 10,
-                Text = "Test Timed Broadcast"
+                Duration = 10
             }
         };
         public List<RepeatedBroadcast> RepeatedBroadcasts { get; private set; } = new List<RepeatedBroadcast>
         {
             new RepeatedBroadcast
             {
+                Text = "Test Repeated Broadcast",
                 Interval = 100f,
-                Duration = 10,
-                Text = "Test Repeated Broadcast"
+                Duration = 10
             }
         };
     }
